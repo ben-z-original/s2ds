@@ -23,9 +23,9 @@ Always link and cite the work properly:
 ## Download
 ### ... from Google Drive
 The S2DS dataset can be downloaded from Google drive:
-```
+
 https://drive.google.com/file/d/1PQ50QKfy2vnDOHSmw5bpBFi33hZsSXuM/view?usp=sharing
-``` 
+
 
 <!--- ### ... using Git *(only test set)*
 The S2DS **test set** was pushed to github using Git LFS (*large file storage*, https://git-lfs.github.com/). 
