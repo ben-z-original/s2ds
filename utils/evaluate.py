@@ -1,6 +1,8 @@
 import os
 import cv2
+import subprocess
 import numpy as np
+import pandas as pd
 from torch import from_numpy
 from torchmetrics import JaccardIndex
 from utils import ltIoUMetric, pred2class, lab2class, boundary_tolerance
@@ -21,7 +23,7 @@ if __name__ == "__main__":
     pred_acc = [np.empty((0, 1024, 1024), np.uint8)] * len(pred_paths)
     true_acc = np.empty((0, 1024, 1024), np.uint8)
 
-    for f in files[:5]:
+    for f in files:
         print(f)
 
         # get predictions
@@ -47,7 +49,6 @@ if __name__ == "__main__":
         # non-crack
         iou[i, ...] = JaccardIndex(num_classes=8, average=None, ignore_index=7)(from_numpy(pred_acc[i]),
                                                                                 from_numpy(true_acc))
-        print(iou[i, ...])
         # crack
         pred_acc[i] = np.where((pred_acc[i] != 1), 0, 1).astype(np.uint8)
         true_acc_tmp = np.where((true_acc != 1), 0, 1).astype(np.uint8)
@@ -57,3 +58,28 @@ if __name__ == "__main__":
 
     print(iou)
     print(ltiou)
+
+    # latex output
+    latex_iou = "\\documentclass[preview]{standalone}\n"
+    latex_iou += "\\usepackage{booktabs}\n"
+    latex_iou += "\\begin{document}\n"
+
+    latex_iou += pd.DataFrame(
+        dict(Classes=['Background', 'Crack', 'Spalling', 'Corrosion', 'Efflorescence', 'Vegetation', 'Control Point'],
+             nnUNet=iou[0], HMA=iou[1])).to_latex(float_format="{:0.3f}".format)
+
+    latex_iou += "\\end{document}"
+
+    latex_path = "../tex/table_iou.tex"
+    with open(latex_path, 'w') as f:
+        f.write(latex_iou)
+
+    subprocess.run(["pdflatex", latex_path])
+
+    # cleanup
+    os.remove(latex_path.replace(".tex", ".log"))
+    os.remove(latex_path.replace(".tex", ".aux"))
+
+
+
+
