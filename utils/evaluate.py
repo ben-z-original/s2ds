@@ -1,5 +1,6 @@
 import os
 import cv2
+import time
 import subprocess
 import numpy as np
 import pandas as pd
@@ -55,6 +56,8 @@ if __name__ == "__main__":
 
         for j, tol in enumerate(tolerances):
             ltiou[i, j, ...] = ltIoUMetric(tolerance=tol).forward(pred_acc[i], true_acc_tmp)
+            if j == len(tolerances)-1:
+                print(i, ltiou[i, j, ...])
 
     print(iou)
     print(ltiou)
@@ -63,23 +66,32 @@ if __name__ == "__main__":
     latex_iou = "\\documentclass[preview]{standalone}\n"
     latex_iou += "\\usepackage{booktabs}\n"
     latex_iou += "\\begin{document}\n"
+    latex_iou += "%s\n"
+    latex_iou += "\\end{document}"
 
-    latex_iou += pd.DataFrame(
+    # prepare pandas
+    pd_iou = pd.DataFrame(
         dict(Classes=['Background', 'Crack', 'Spalling', 'Corrosion', 'Efflorescence', 'Vegetation', 'Control Point'],
              nnUNet=iou[0], HMA=iou[1])).to_latex(float_format="{:0.3f}".format)
 
-    latex_iou += "\\end{document}"
+    pd_ltiou = pd.DataFrame(dict(Tolerance=tolerances, nnUNet=ltiou[0, ..., 1], HMA=ltiou[1, ..., 1])).to_latex(
+        float_format="{:0.3f}".format)
 
-    latex_path = "../tex/table_iou.tex"
-    with open(latex_path, 'w') as f:
-        f.write(latex_iou)
+    # write files
+    latex_iou_path = "../tex/table_iou.tex"
+    with open(latex_iou_path, 'w') as f:
+        f.write(latex_iou % pd_iou)
 
-    subprocess.run(["pdflatex", latex_path])
+    latex_ltiou_path = "../tex/table_ltiou.tex"
+    with open(latex_ltiou_path, 'w') as f:
+        f.write(latex_iou % pd_ltiou)
+
+    # compile latex
+    subprocess.run(["pdflatex", "-output-directory=../tex", latex_iou_path])
+    subprocess.run(["pdflatex", "-output-directory=../tex", latex_ltiou_path])
 
     # cleanup
-    os.remove(latex_path.replace(".tex", ".log"))
-    os.remove(latex_path.replace(".tex", ".aux"))
-
-
-
-
+    os.remove(latex_iou_path.replace(".tex", ".log"))
+    os.remove(latex_iou_path.replace(".tex", ".aux"))
+    os.remove(latex_ltiou_path.replace(".tex", ".log"))
+    os.remove(latex_ltiou_path.replace(".tex", ".aux"))
