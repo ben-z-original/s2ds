@@ -1,4 +1,6 @@
+import os
 import cv2
+import glob
 import numpy as np
 from torch import from_numpy, nn
 from torchmetrics import JaccardIndex
@@ -10,11 +12,11 @@ matplotlib.use("TkAgg")
 from matplotlib import pyplot as plt
 
 
-class ltIoUMetric(nn.Module):
+class LtIoUMetric(nn.Module):
     """ Represents line-based, tolerant intersection-over-union (IoU). """
 
     def __init__(self, tolerance=5):
-        super(ltIoUMetric, self).__init__()
+        super(LtIoUMetric, self).__init__()
         self.tolerance = tolerance
 
     def forward(self, output, target):
@@ -110,3 +112,14 @@ def imwrite_colormap(path, img):
     colormap = matplotlib.colors.ListedColormap(colors, name='my_colormap_name')
     path = '.'.join(path.split(".")[:-1] + ["png"])
     plt.imsave(path, img, cmap=colormap)
+
+
+def export_mapped_labels(path):
+    """ Convert color labels to integer labels and write to disk. """
+    files = glob.glob(os.path.join(path, "[0-9][0-9][0-9]_lab.png"))
+
+    for f in files:
+        lab = cv2.imread(f, cv2.IMREAD_COLOR)
+        lab = cv2.cvtColor(lab, cv2.COLOR_BGR2RGB)
+        lab = lab2class(lab)
+        cv2.imwrite(f.replace("_lab.", "_mapped."), lab)
