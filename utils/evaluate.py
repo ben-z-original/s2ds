@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 from torch import from_numpy
 from torchmetrics import JaccardIndex
-from utils import ltIoUMetric, pred2class, lab2class, boundary_tolerance
+from utils import LtIoUMetric, pred2class, lab2class, boundary_tolerance
 
 import matplotlib
 
@@ -55,9 +55,7 @@ if __name__ == "__main__":
         true_acc_tmp = np.where((true_acc != 1), 0, 1).astype(np.uint8)
 
         for j, tol in enumerate(tolerances):
-            ltiou[i, j, ...] = ltIoUMetric(tolerance=tol).forward(pred_acc[i], true_acc_tmp)
-            if j == len(tolerances)-1:
-                print(i, ltiou[i, j, ...])
+            ltiou[i, j, ...] = LtIoUMetric(tolerance=tol).forward(pred_acc[i], true_acc_tmp)
 
     print(iou)
     print(ltiou)
