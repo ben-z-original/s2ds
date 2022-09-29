@@ -8,10 +8,11 @@ The S2DS dataset (<u>S</u>tructural <u>D</u>efects <u>D</u>ata<u>s</u>et) featur
 Always link and cite the work properly:
 
 ```
-@inproceedings{benz2022defects,
-  title={Image-based Detection of Structural Defects using Hierarchical Multi-Scale Attention},
+@inproceedings{benz2022image,
+  title={Image-Based Detection of Structural Defects Using Hierarchical Multi-scale Attention},
   author={Benz, Christian and Rodehorst, Volker},
   booktitle={DAGM German Conference on Pattern Recognition},
+  pages={337--353},
   year={2022},
   organization={Springer}
 }
