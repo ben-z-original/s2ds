@@ -2,6 +2,11 @@
 
 The S2DS dataset (<u>S</u>tructural <u>D</u>efects <u>D</u>ata<u>s</u>et) features 743 images of mostly concrete surfaces representing typical structural defects – such as crack or spalling – or control points. Each image is a 1024×1024 patch from a larger image. The classes covered are *background*, *crack*, *spalling*, *corrosion*, *efflorescence*, *vegetation*, *control point*.
 
+## Terms and Conditions of Use
+The S2DS dataset is publicly available for academic use only. While every effort has been made to ensure the accuracy of this database, we cannot accept responsibility for errors or omissions. The academic use of this database is free of charge. Any commercial distribution or act related to the commercial usage of this database is strictly prohibited. The distribution of this database to any parties that have not read and agreed to the terms and conditions of usage is strictly prohibited. Neither Bauhaus-Universität Weimar, nor any third parties who may provide information to us for the dissemination purpose, shall have any responsibility for or be liable in respect of the content or the accuracy of the provided information, or for any errors or omissions therein. The Bauhaus-Universität Weimar reserves the right to revise, amend, alter or delete the information provided herein at any time, but shall not be responsible for or liable in respect of any such revisions, amendments, alterations or deletions.
+
+*<sub>(Adapted from GAPs request form, https://www.tu-ilmenau.de/fileadmin/Bereiche/IA/neurob/Datasets/Request-Gaps3.pdf.)</sub>*
+
 ## Citation
 **The dataset must not be shared or distributed.**
 
